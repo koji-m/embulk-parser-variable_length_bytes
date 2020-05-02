@@ -33,7 +33,7 @@ in:
 ```
 
 
-## Build
+## Install plugin
 
 Currently the status of this plugin is work in progress.
 
