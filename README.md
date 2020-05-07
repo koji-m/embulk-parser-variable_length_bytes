@@ -9,10 +9,10 @@ Variable length bytes record parser plugin for Embulk.
 
 ## Configuration
 
-- **columns**: Specify column name and type, range of bytes (array, required)
-- **record_separator**: Hexadecimal representation of characters for record separator sequence (eg. `0x20`) or new line character(`CR`, `LF`, `CRLF`) (string, default: `LF`)
-- **charset**: Character encoding (eg. `ISO-8859-1`, `UTF-8`) (string, default: `UTF-8`)
-- **stop_on_invalid_record**: Stop bulk load transaction if a file includes invalid record (boolean, default: `false`)
+- **columns**: Specify column name and type, range of bytes('\<start\>..\<end\>'). If the last column has a variable length, specify it as '\<start\>...'. (array, required)
+- **record_separator**: Hexadecimal representation of characters for record separator sequence (eg. `0x20`) or new line character(`CR`, `LF`, `CRLF`). Set `null` to parse fixed-length records without record separator. (string, default: `LF`)
+- **charset**: Character encoding (eg. `ISO-8859-1`, `UTF-8`). (string, default: `UTF-8`)
+- **stop_on_invalid_record**: Stop bulk load transaction if a file includes invalid record. (boolean, default: `false`)
 
 ## Example
 

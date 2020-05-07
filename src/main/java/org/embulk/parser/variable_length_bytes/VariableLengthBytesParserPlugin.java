@@ -1,5 +1,6 @@
 package org.embulk.parser.variable_length_bytes;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
@@ -47,7 +48,7 @@ public class VariableLengthBytesParserPlugin
 
         @Config("record_separator")
         @ConfigDefault("\"LF\"")
-        public String getRecordSeparator();
+        public Optional<String> getRecordSeparator();
 
         @Config("charset")
         @ConfigDefault("\"utf-8\"")
@@ -81,10 +82,16 @@ public class VariableLengthBytesParserPlugin
         return positions;
     }
 
-    private List<Byte> parseRecordSeparator(String separator)
+    private List<Byte> parseRecordSeparator(Optional<String> separator)
     {
         List<Byte> res = new ArrayList<>();
-        switch (separator) {
+
+        if (!separator.isPresent()) {
+            return res;
+        }
+
+        String separatorStr = separator.get();
+        switch (separatorStr) {
             case "CR":
                 res.add(Byte.valueOf((byte) 0x0D));
                 break;
@@ -96,7 +103,7 @@ public class VariableLengthBytesParserPlugin
                 res.add(Byte.valueOf((byte) 0x0A));
                 break;
             default:
-                byte[] bytes = DatatypeConverter.parseHexBinary(separator);
+                byte[] bytes = DatatypeConverter.parseHexBinary(separatorStr);
                 for (byte b : bytes) {
                     res.add(Byte.valueOf(b));
                 }
@@ -289,6 +296,10 @@ public class VariableLengthBytesParserPlugin
         String charset = task.getCharset().name();
         boolean stopOnInvalidRecord = task.getStopOnInvalidRecord();
 
+        if (recordSeparatorSize == 0 && containsVarLenField) {
+            throw new ConfigException("If you have variable length field, you must specify a record separator.");
+        }
+
         try (FileInputInputStream is = new FileInputInputStream(input);
              PageBuilder pageBuilder = new PageBuilder(Exec.getBufferAllocator(), schema, output)
         ) {
@@ -339,6 +350,7 @@ public class VariableLengthBytesParserPlugin
                         totalLen = 0;
                     }
                 }
+                pageBuilder.finish();
             }
         } catch (Exception e) {
             // ToDo
