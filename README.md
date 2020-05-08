@@ -1,5 +1,7 @@
 # Variable Length Bytes parser plugin for Embulk
 
+[![Gem Version](https://badge.fury.io/rb/embulk-parser-variable_length_bytes.svg)](https://badge.fury.io/rb/embulk-parser-variable_length_bytes)
+
 Variable length bytes record parser plugin for Embulk.
 
 ## Overview
@@ -7,6 +9,11 @@ Variable length bytes record parser plugin for Embulk.
 * **Plugin type**: parser
 * **Guess supported**: no
 
+## Install
+
+```shell script
+$ embulk gem install embulk-parser-variable_length_bytes
+```
 ## Configuration
 
 - **columns**: Specify column name and type, range of bytes('\<start\>..\<end\>'). If the last column has a variable length, specify it as '\<start\>...'. (array, required)
@@ -32,20 +39,9 @@ in:
     - {name: description, type: string, pos: '20...'}
 ```
 
+## Build
 
-## Install plugin
-
-Currently the status of this plugin is work in progress.
-
-To install manually.
-
-```
-$ git clone https://github.com/koji-m/embulk-parser-variable_length_bytes.git
-$ cd embulk-parser-variable_length_bytes
-$ ./gradlew package
-
-# prepare config.yml file
-
-$ embulk run -L path/to/embulk-parser-variable_length_bytes config.yml
+```shell script
+$ ./gradlew gem
 ```
 
