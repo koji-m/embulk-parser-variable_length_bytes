@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import org.embulk.config.Config;
 import org.embulk.config.ConfigDefault;
+import org.embulk.config.ConfigException;
 import org.embulk.config.ConfigSource;
 import org.embulk.config.Task;
 import org.embulk.config.TaskSource;
@@ -360,14 +361,6 @@ public class VariableLengthBytesParserPlugin
     static class RecordException extends DataException
     {
         RecordException(String cause)
-        {
-            super(cause);
-        }
-    }
-
-    static class ConfigException extends DataException
-    {
-        ConfigException(String cause)
         {
             super(cause);
         }
