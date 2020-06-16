@@ -340,7 +340,7 @@ public class VariableLengthBytesParserPlugin
                         if (invalidRecordSeparator(buf, recordSeparator,
                                 recordSize, recordSeparatorSize)) {
                             if (stopOnInvalidRecord) {
-                                throw new RecordException(String.format("Invalid record separator(%s): %d", fileName));
+                                throw new DataException(String.format("Invalid record separator(%s): %d", fileName));
                             }
                             logger.warn(String.format("Skipped record: file: %s, record-separator:%d,%d:%s", fileName, buf[bufSize - 2], buf[bufSize - 1],
                                     new String(buf, java.nio.charset.Charset.forName("Shift_JIS"))));
@@ -355,14 +355,6 @@ public class VariableLengthBytesParserPlugin
             }
         } catch (Exception e) {
             // ToDo
-        }
-    }
-
-    static class RecordException extends DataException
-    {
-        RecordException(String cause)
-        {
-            super(cause);
         }
     }
 
