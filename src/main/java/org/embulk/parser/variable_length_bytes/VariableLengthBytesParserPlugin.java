@@ -331,6 +331,9 @@ public class VariableLengthBytesParserPlugin
                     while (true) {
                         int len = is.read(buf, totalLen, bufSize - totalLen);
                         if (len < 0) {
+                            if (totalLen > 0) {
+                                throw new DataException("File ended with insufficient record length");
+                            }
                             break;
                         }
                         totalLen += len;
@@ -353,8 +356,6 @@ public class VariableLengthBytesParserPlugin
                 }
                 pageBuilder.finish();
             }
-        } catch (Exception e) {
-            // ToDo
         }
     }
 
