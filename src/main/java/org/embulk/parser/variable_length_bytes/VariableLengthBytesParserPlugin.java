@@ -168,8 +168,7 @@ public class VariableLengthBytesParserPlugin
                 }
             }
             catch (UnsupportedEncodingException e) {
-                // ToDo
-                System.err.println("UnsupportedEncoding");
+                throw new DataException("Could not decode with specified charset");
             }
         }
         pageBuilder.addRecord();
@@ -203,8 +202,7 @@ public class VariableLengthBytesParserPlugin
                 }
             }
             catch (UnsupportedEncodingException e) {
-                // ToDo
-                System.err.println("UnsupportedEncoding");
+                throw new DataException("Could not decode with specified charset");
             }
         }
         Column varLenColumn = columns.get(numColumns - 1);
@@ -269,8 +267,7 @@ public class VariableLengthBytesParserPlugin
             }
         }
         catch (UnsupportedEncodingException e) {
-            // ToDo
-            System.err.println("UnsupportedEncoding");
+            throw new DataException("Could not decode with specified charset");
         }
         pageBuilder.addRecord();
     }
@@ -314,6 +311,9 @@ public class VariableLengthBytesParserPlugin
                     while (true) {
                         int len = is.read(buf, totalLen, bufSize - totalLen);
                         if (len < 0) {
+                            if (totalLen > 0) {
+                                throw new DataException("File ended with insufficient record length");
+                            }
                             break;
                         }
                         totalLen += len;
